@@ -11,7 +11,7 @@ export default function Hero() {
       ></div>
       <div className="absolute inset-0 bg-black/50"></div>
       <div className="relative container mx-auto px-6 py-32 md:py-48 text-center text-white">
-        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter mb-4">
+        <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
           Elevate Your Living Space
         </h1>
         <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-200 mb-8">

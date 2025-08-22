@@ -1,5 +1,7 @@
+"use client"
 import Link from 'next/link';
 import React from 'react'
+import { signUpUser } from '../actions/signUpUsers';
 
 export default function SignUp() {
   const handleSubmit = async (event) => {
@@ -8,25 +10,9 @@ export default function SignUp() {
     const name = form.name.value;
     const email = form.email.value;
     const password = form.password.value;
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signup/route.js`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      }
-    );
-
-    const data = await res.json();
-    console.log(data);
-
-    if (res.ok) {
-      alert("Account created successfully!");
-      form.reset();
-    } else {
-      alert(data.error || "Failed to sign up");
-    }
+    const payload = { name, email, password }
+    const result = await signUpUser(payload);
+    console.log(result);
   };
   return (
     <div className="mt-20 flex flex-col items-center">
@@ -45,7 +31,7 @@ export default function SignUp() {
         </p>
       </div>
       <div className="p-8 shadow-sm border border-neutral-200 rounded-lg w-full md:w-2xl">
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-bold" htmlFor="email">
               Name{" "}

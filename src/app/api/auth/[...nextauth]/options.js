@@ -1,4 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import dbConnect, { collectionsObj } from "@/lib/dbConnect";
 import bcrypt from "bcrypt";
 export const authOptions = {
@@ -11,7 +12,11 @@ export const authOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "Enter your email" },
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "Enter your email",
+        },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
@@ -19,14 +24,19 @@ export const authOptions = {
 
         try {
           const user = await usersCollection.findOne({
-            email: credentials.email, // FIXED
+            email: credentials.email,
           });
+          console.log(user);
           if (!user) {
-            throw new Error("No user fond with this email");
+            return null;
           }
 
-          if (credentials.password !== user.password) {
-            throw new Error("Invalid password");
+          const isPasswordCorrect = credentials.password === user.password;
+
+          if (isPasswordCorrect) {
+            return user;
+          } else {
+            return null;
           }
 
           // const isPasswordCorrect = await bcrypt.compare(
@@ -38,37 +48,42 @@ export const authOptions = {
           // } else {
           //   return null;
           // }
+
+          // if (user) {
+          //   // Any object returned will be saved in `user` property of the JWT
+          //   return user;
+          // } else {
+          //   // If you return null then an error will be displayed advising the user to check their details.
+          //   return null;
+
+          //   // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+          // }
         } catch (error) {
+          console.log(error);
           throw new Error(error);
         }
         // Add logic here to look up the user from the credentials supplied
-        const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
-
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
-          return user;
-        } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null;
-
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
-        }
+        // const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if(user){
-        token._id = user._id?.toString()
-        token.email = user.email
-      }
-      return token;
-    },
     async session({ session, token }) {
       if (token && session.user) {
         (session.user._id = token._id), (session.user.email = token.email);
       }
       return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token._id = user._id?.toString();
+        token.email = user.email;
+      }
+      return token;
     },
   },
   pages: {

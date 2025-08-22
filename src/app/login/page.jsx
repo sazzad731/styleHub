@@ -2,6 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { SocialButton } from "@/components/AuthButtons/AuthButtons";
 
 export default function Login() {
   
@@ -83,7 +84,7 @@ export default function Login() {
             </div>
           </div>
           <div className="flex justify-center mt-5">
-            <button className="btn">
+            {/* <button className="btn">
               <svg
                 className="mr-3 h-5 w-5"
                 height="48px"
@@ -109,7 +110,8 @@ export default function Login() {
                 ></path>
               </svg>
               Continue with Google
-            </button>
+            </button> */}
+            <SocialButton/>
           </div>
         </div>
       </div>

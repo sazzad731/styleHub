@@ -32,7 +32,6 @@ export default function RootLayout({ children }) {
   );
   const authButton = <>
     <AuthButtons/>
-    <Link href="/sign-up" className="btn">Sign up</Link>
   </>
   return (
     <html lang="en">
