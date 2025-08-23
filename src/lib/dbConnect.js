@@ -9,7 +9,8 @@ export const collectionsObj = {
 
 
 export default function dbConnect(collectionName) {
-  const client = new MongoClient(process.env.DB_URI, {
+  const uri = process.env.NEXT_PUBLIC_MONGODB_URI;
+  const client = new MongoClient(uri, {
     serverApi: {
       version: ServerApiVersion.v1,
       strict: true,

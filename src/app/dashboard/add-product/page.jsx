@@ -13,7 +13,7 @@ export default function page() {
     const payload = { title, price, image, description };
 
     const result = await addProduct(payload);
-    console.log(result);
+    form.reset();
   }
 
   return (

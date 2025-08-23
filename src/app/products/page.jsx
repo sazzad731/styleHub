@@ -15,7 +15,7 @@ export default async function AllProducts() {
               <div
                 className="w-full h-56 bg-center bg-no-repeat bg-cover rounded-t-2xl"
                 style={{
-                  backgroundImage: `url(${prod.image})`,
+                  backgroundImage: `url(${prod?.image})`,
                 }}
               ></div>
             </div>
